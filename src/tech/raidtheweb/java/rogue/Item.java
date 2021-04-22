@@ -25,6 +25,9 @@ public class Item implements Serializable {
     public int rangedAttackValue() { return rangedAttackValue; }
     public void modifyRangedAttackValue(int amount) { rangedAttackValue += amount; }
 
+    private Effect quaffEffect;
+    public Effect quaffEffect() { return quaffEffect; }
+    public void setQuaffEffect(Effect effect) { this.quaffEffect = effect; }
     
     private char glyph;
     public char glyph() { return glyph; }

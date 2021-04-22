@@ -50,7 +50,7 @@ public class Main extends JFrame implements KeyListener {
 		
 		this.getContentPane().setLayout(new FlowLayout());
 		this.getContentPane().setBackground(Color.BLACK);
-		terminal = new AsciiPanel(120, 24, AsciiFont.CP437_9x16);
+		terminal = new AsciiPanel(120, 24, AsciiFont.NEXUSSPELUNKER_9x16);
 		this.add(terminal);
 		this.pack();
 		screen = new StartScreen(this);

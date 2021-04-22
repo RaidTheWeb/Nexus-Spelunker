@@ -65,33 +65,39 @@ public class WorldFactory implements Serializable {
 	}
 	
 	public NPCOffer randomTrade() {
-		NPCOffer offer = new NPCOffer(randomItem(), randomItem());
-		return offer;
+		switch((int)(Math.random() * 5)) {
+		case 0: return new NPCOffer(Items.getItem("dagger"), Items.getItem("bow"));
+		case 1: return new NPCOffer(Items.getItem("bow"), Items.getItem("staff"));
+		case 2: return new NPCOffer(Items.getItem("chainmail"), Items.getItem("sword"));
+		case 3: return new NPCOffer(Items.getItem("tunic"), Items.getItem("bow"));
+		default:
+			return new NPCOffer(Items.getItem("staff"), Items.getItem("tunic"));
+		}
 	}
 	
 	public Item randomItem() {
 		switch ((int)(Math.random() * 6)){
-        case 0: return new Item(',', AsciiPanel.yellow, "rock");
+        case 0: return new Item((char)174, AsciiPanel.yellow, "rock");
         case 1: 
-        	Item dagger = new Item(')', AsciiPanel.white, "dagger");
+        	Item dagger = new Item((char)173, AsciiPanel.white, "dagger");
         	dagger.modifyAttackValue(5);
         	return dagger;
-        case 2: return new Item(')', AsciiPanel.yellow, "staff");
+        case 2: return new Item((char)172, AsciiPanel.yellow, "staff");
         case 3:
-        	Item sword = new Item(')', AsciiPanel.brightWhite, "sword");
+        	Item sword = new Item((char)173, AsciiPanel.brightWhite, "sword");
         	sword.modifyAttackValue(10);
         	return sword;
         case 4: 
-        	Item bow = new Item(')', AsciiPanel.yellow, "bow");
+        	Item bow = new Item((char)175, AsciiPanel.yellow, "bow");
         	bow.modifyAttackValue(1);
         	bow.modifyRangedAttackValue(5);
         	return bow;
         case 5: 
-        	Item tunic = new Item('[', AsciiPanel.green, "tunic");
+        	Item tunic = new Item((char)171, AsciiPanel.green, "tunic");
         	tunic.modifyDefenseValue(2);
         	return tunic;
         default: 
-        	Item chainmail = new Item('[', AsciiPanel.white, "chainmail");
+        	Item chainmail = new Item((char)171, AsciiPanel.white, "chainmail");
         	chainmail.modifyDefenseValue(4);
         	return chainmail;
         }
@@ -100,36 +106,28 @@ public class WorldFactory implements Serializable {
 	
 	// ITEMS
 	public Item newRock(int depth){
-        Item rock = new Item(',', AsciiPanel.yellow, "rock");
+        Item rock = new Item((char)174, AsciiPanel.yellow, "rock");
         world.addAtEmptyLocation(rock, depth);
         return rock;
     }
 	
-
-	public Item newVictoryItem(int depth){
-        Item item = new Item('*', AsciiPanel.brightWhite, "teddy bear");
-        world.addAtEmptyLocation(item, depth);
-        return item;
-    }
-	
-	
 	// WEAPONS
 	public Item newDagger(int depth){
-	    Item item = new Item(')', AsciiPanel.white, "dagger");
+	    Item item = new Item((char)173, AsciiPanel.white, "dagger");
 	    item.modifyAttackValue(5);
 	    world.addAtEmptyLocation(item, depth);
 	    return item;
 	}
 
 	public Item newSword(int depth){
-	    Item item = new Item(')', AsciiPanel.brightWhite, "sword");
+	    Item item = new Item((char)173, AsciiPanel.brightWhite, "sword");
 	    item.modifyAttackValue(10);
 	    world.addAtEmptyLocation(item, depth);
 	    return item;
 	}
 
 	public Item newStaff(int depth){
-	    Item item = new Item(')', AsciiPanel.yellow, "staff");
+	    Item item = new Item((char)172, AsciiPanel.yellow, "staff");
 	    item.modifyAttackValue(5);
 	    item.modifyDefenseValue(3);
 	    world.addAtEmptyLocation(item, depth);
@@ -137,7 +135,7 @@ public class WorldFactory implements Serializable {
 	}
 	
 	public Item newBow(int depth){
-        Item item = new Item(')', AsciiPanel.yellow, "bow");
+        Item item = new Item((char)175, AsciiPanel.yellow, "bow");
         item.modifyAttackValue(1);
         item.modifyRangedAttackValue(5);
         world.addAtEmptyLocation(item, depth);
@@ -147,21 +145,21 @@ public class WorldFactory implements Serializable {
 	
 	// ARMOUR
 	public Item newLightArmor(int depth){
-	    Item item = new Item('[', AsciiPanel.green, "tunic");
+	    Item item = new Item((char)171, AsciiPanel.green, "tunic");
 	    item.modifyDefenseValue(2);
 	    world.addAtEmptyLocation(item, depth);
 	    return item;
 	}
 
 	public Item newMediumArmor(int depth){
-	    Item item = new Item('[', AsciiPanel.white, "chainmail");
+	    Item item = new Item((char)171, AsciiPanel.white, "chainmail");
 	    item.modifyDefenseValue(4);
 	    world.addAtEmptyLocation(item, depth);
 	    return item;
 	}
 
 	public Item newHeavyArmor(int depth){
-	    Item item = new Item('[', AsciiPanel.brightWhite, "platemail");
+	    Item item = new Item((char)171, AsciiPanel.brightWhite, "platemail");
 	    item.modifyDefenseValue(6);
 	    world.addAtEmptyLocation(item, depth);
 	    return item;
@@ -183,5 +181,66 @@ public class WorldFactory implements Serializable {
 	    default: return newHeavyArmor(depth);
 	    }
 	}
+	
+	// POTIONS
+	public Item newPotionOfHealth(int depth){
+	    Item item = new Item((char)21, AsciiPanel.red, "health potion");
+	    item.setQuaffEffect(new Effect(1){
+	        public void start(Creature creature){
+	            if (creature.hp() == creature.maxHp())
+	                return;
+	                                
+	            creature.modifyHp(15);
+	            creature.doAction("look healthier");
+	        }
+	    });
+	                
+	    world.addAtEmptyLocation(item, depth);
+	    return item;
+	}
+	
+	public Item newPotionOfRegen(int depth){
+	    Item item = new Item((char)21, AsciiPanel.red, "regeneration potion");
+	    item.setQuaffEffect(new Effect(20){
+	        public void start(Creature creature){
+	            creature.doAction("look healthier");
+	        }
+	                        
+	        public void update(Creature creature){
+	            super.update(creature);
+	            creature.modifyHp(1);
+	        }
+	    });
+	                
+	    world.addAtEmptyLocation(item, depth);
+	    return item;
+	}
+	
+	public Item newPotionOfWarrior(int depth){
+	    Item item = new Item((char)21, AsciiPanel.brightYellow, "warrior's potion");
+	    item.setQuaffEffect(new Effect(20){
+	        public void start(Creature creature){
+	            creature.modifyAttackValue(5);
+	            creature.modifyDefenseValue(5);
+	            creature.doAction("look stronger");
+	        }
+	        public void end(Creature creature){
+	            creature.modifyAttackValue(-5);
+	            creature.modifyDefenseValue(-5);
+	            creature.doAction("look less strong");
+	        }
+	    });
+	                
+	    world.addAtEmptyLocation(item, depth);
+	    return item;
+	}
 
+	public Item randomPotion(int depth){
+        switch ((int)(Math.random() * 3)){
+        case 0: return newPotionOfHealth(depth);
+        //case 1: return newPotionOfRegen(depth);
+        default: return newPotionOfWarrior(depth);
+        }
+	}
+	
 }

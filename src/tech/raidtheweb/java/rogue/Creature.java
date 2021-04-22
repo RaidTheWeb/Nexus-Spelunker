@@ -2,6 +2,8 @@ package tech.raidtheweb.java.rogue;
 
 import java.awt.Color;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import tech.raidtheweb.java.rogue.brains.creatures.CreatureAi;
 
@@ -46,6 +48,8 @@ public class Creature implements Serializable {
 	     + (armor == null ? 0 : armor.defenseValue());
 	}
 
+	private List<Effect> effects;
+	public List<Effect> effects(){ return effects; }
 
 
 	private int visionRadius;
@@ -104,6 +108,7 @@ public class Creature implements Serializable {
 		this.visionRadius = 9;
 		this.name = name;
 		this.inventory = new Inventory(20);
+		this.effects = new ArrayList<>();
 	}
 	
 	public void moveBy(int mx, int my, int mz){
@@ -146,7 +151,7 @@ public class Creature implements Serializable {
 		other.modifyHp(-amount);
 	}
 
-	public void modifyHp(int amount) { 
+	public void modifyHp(int amount) {
 		hp += amount;
 		
 		if (hp < 1) {
@@ -162,6 +167,7 @@ public class Creature implements Serializable {
 	
 	public void update(){
 		ai.onUpdate();
+		updateEffects();
 	}
 
 	public boolean canEnter(int wx, int wy, int wz) {
@@ -328,5 +334,45 @@ public class Creature implements Serializable {
         doAction(action, params2);
     
         other.modifyHp(-amount);
+    }
+	public void modifyAttackValue(int i) {
+		this.attackValue += i;
+	}
+	public void modifyDefenseValue(int i) {
+		this.defenseValue += i;
+	}
+	
+	public void quaff(Item item){
+        doAction("quaff a " + item.name());
+        consume(item);
+    }
+    
+    private void consume(Item item){
+            
+        addEffect(item.quaffEffect());
+        
+        getRidOf(item);
+    }
+    
+    private void addEffect(Effect effect){
+        if (effect == null)
+            return;
+            
+        effect.start(this);
+        effects.add(effect);
+    }
+    
+    private void updateEffects(){
+        List<Effect> done = new ArrayList<Effect>();
+            
+        for (Effect effect : effects){
+            effect.update(this);
+            if (effect.isDone()) {
+                effect.end(this);
+                done.add(effect);
+            }
+        }
+            
+        effects.removeAll(done);
     }
 }

@@ -8,8 +8,8 @@ public enum Tile {
 	FLOOR((char)250, AsciiPanel.brightBlack, "A dirt and rock cave floor."),
     WALL((char)219, AsciiPanel.white, "A dirt and rock cave wall."),
     BOUNDS('x', AsciiPanel.brightBlack, "Beyond the edge of the world."),
-    STAIRS_DOWN('>', AsciiPanel.white, "A stone staircase that goes down."),
-    STAIRS_UP('<', AsciiPanel.white, "A stone staircase that goes up."),
+    STAIRS_DOWN('<', AsciiPanel.white, "A stone staircase that goes down."),
+    STAIRS_UP('>', AsciiPanel.white, "A stone staircase that goes up."),
     UNKNOWN(' ', AsciiPanel.white, "(unknown)");
 
     private String details;

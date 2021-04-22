@@ -183,10 +183,10 @@ public class PlayScreen implements Screen {
 			}
 			for (int i = 0; i < world.width() * world.height() / 60; i++){
 				factory.randomWeapon(z);
+				factory.randomPotion(z);
 			}
 			factory.randomArmor(z);
 		}
-		factory.newVictoryItem(world.depth() - 1);
 	}
 	
 	private void createWorld(){
@@ -342,6 +342,9 @@ public class PlayScreen implements Screen {
 		        program.execute();
 		        player.notify("DSL Script Engine: Script Finished");
 		        Main.log("[DSLHandler]: Finished Running Script");
+				break;
+			case KeyEvent.VK_Q:
+				subscreen = new QuaffScreen(player);
 				break;
 			}
 			
