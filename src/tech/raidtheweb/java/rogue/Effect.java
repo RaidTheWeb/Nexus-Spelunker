@@ -1,7 +1,13 @@
 package tech.raidtheweb.java.rogue;
 
-public class Effect {
-    protected int duration;
+import java.io.Serializable;
+
+public class Effect implements Serializable {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2560507245762606712L;
+	protected int duration;
     
     public boolean isDone() { return duration < 1; }
     

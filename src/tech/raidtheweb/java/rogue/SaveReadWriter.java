@@ -39,10 +39,10 @@ public class SaveReadWriter {
         }
 	}
 	
-	public void writeSave(World world, Creature player) {
+	public void writeSave(World world, Creature player, FieldOfView fov) {
 		try {
 			Main.log("[SaveHandler]: Saving game...");
-			Object serObj = new SaveGameObject(player, world);
+			Object serObj = new SaveGameObject(player, world, fov);
             FileOutputStream fileOut = new FileOutputStream(this.filename);
             ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
             objectOut.writeObject(serObj);

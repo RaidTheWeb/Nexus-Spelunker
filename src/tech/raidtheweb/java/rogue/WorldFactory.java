@@ -18,9 +18,11 @@ public class WorldFactory implements Serializable {
 	 */
 	private static final long serialVersionUID = 6768163841864338179L;
 	private World world;
+	private Items Items;
 	
 	public WorldFactory(World world){
 		this.world = world;
+		this.Items = new Items();
 	}
 	
 	// PLAYER
@@ -53,6 +55,16 @@ public class WorldFactory implements Serializable {
 	      world.addAtEmptyLocation(zombie, depth);
 	      new ZombieAi(zombie, player);
 	      return zombie;
+	}
+	
+	public Creature newGoblin(int depth, Creature player){
+	      Creature goblin = new Creature(world, 'g', AsciiPanel.green , "goblin", 50, 10, 5);
+	      world.addAtEmptyLocation(goblin, depth);
+	      Item sword = Items.getItem("sword");
+	      goblin.inventory().add(sword);
+	      goblin.equip(sword);
+	      new ZombieAi(goblin, player);
+	      return goblin;
 	}
 	
 	public Creature newNPC(int depth) {
@@ -185,15 +197,7 @@ public class WorldFactory implements Serializable {
 	// POTIONS
 	public Item newPotionOfHealth(int depth){
 	    Item item = new Item((char)21, AsciiPanel.red, "health potion");
-	    item.setQuaffEffect(new Effect(1){
-	        public void start(Creature creature){
-	            if (creature.hp() == creature.maxHp())
-	                return;
-	                                
-	            creature.modifyHp(15);
-	            creature.doAction("look healthier");
-	        }
-	    });
+	    item.setQuaffEffect(new HealthEffect(1));
 	                
 	    world.addAtEmptyLocation(item, depth);
 	    return item;
@@ -201,16 +205,7 @@ public class WorldFactory implements Serializable {
 	
 	public Item newPotionOfRegen(int depth){
 	    Item item = new Item((char)21, AsciiPanel.red, "regeneration potion");
-	    item.setQuaffEffect(new Effect(20){
-	        public void start(Creature creature){
-	            creature.doAction("look healthier");
-	        }
-	                        
-	        public void update(Creature creature){
-	            super.update(creature);
-	            creature.modifyHp(1);
-	        }
-	    });
+	    item.setQuaffEffect(new RegenEffect(20));
 	                
 	    world.addAtEmptyLocation(item, depth);
 	    return item;
@@ -218,18 +213,7 @@ public class WorldFactory implements Serializable {
 	
 	public Item newPotionOfWarrior(int depth){
 	    Item item = new Item((char)21, AsciiPanel.brightYellow, "warrior's potion");
-	    item.setQuaffEffect(new Effect(20){
-	        public void start(Creature creature){
-	            creature.modifyAttackValue(5);
-	            creature.modifyDefenseValue(5);
-	            creature.doAction("look stronger");
-	        }
-	        public void end(Creature creature){
-	            creature.modifyAttackValue(-5);
-	            creature.modifyDefenseValue(-5);
-	            creature.doAction("look less strong");
-	        }
-	    });
+	    item.setQuaffEffect(new WarriorEffect(20));
 	                
 	    world.addAtEmptyLocation(item, depth);
 	    return item;
@@ -238,7 +222,7 @@ public class WorldFactory implements Serializable {
 	public Item randomPotion(int depth){
         switch ((int)(Math.random() * 3)){
         case 0: return newPotionOfHealth(depth);
-        //case 1: return newPotionOfRegen(depth);
+        case 1: return newPotionOfRegen(depth);
         default: return newPotionOfWarrior(depth);
         }
 	}

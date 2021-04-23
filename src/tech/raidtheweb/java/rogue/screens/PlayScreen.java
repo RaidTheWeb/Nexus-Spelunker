@@ -3,7 +3,6 @@ package tech.raidtheweb.java.rogue.screens;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -42,7 +41,7 @@ import tech.raidtheweb.java.rogue.brains.creatures.ZombieAi;
 
 public class PlayScreen implements Screen {
 	private World world;
-	private Creature player;
+	public Creature player;
 	private int screenWidth;
 	private int screenHeight;
 	private List<String> messages;
@@ -72,6 +71,7 @@ public class PlayScreen implements Screen {
 			SaveGameObject save = (SaveGameObject) loader.readSave();
 			this.world = save.getWorld();
 			this.player = save.getPlayer();
+			this.fov = save.getFov();
 		} else {
 			createWorld();
 		}
@@ -86,7 +86,9 @@ public class PlayScreen implements Screen {
 			}
 		}
 		
-		fov = new FieldOfView(world);
+		if (fov == null) {
+			fov = new FieldOfView(world);
+		}
 		
 		WorldFactory factory = new WorldFactory(world);
 		createCreatures(factory);
@@ -181,8 +183,10 @@ public class PlayScreen implements Screen {
 			for (int i = 0; i < world.width() * world.height() / 20; i++){
 				factory.newRock(z);
 			}
-			for (int i = 0; i < world.width() * world.height() / 60; i++){
+			for (int i = 0; i < world.width() * world.height() / 120; i++){
 				factory.randomWeapon(z);
+			}
+			for (int i = 0; i < world.width() * world.height() / 240; i++) {
 				factory.randomPotion(z);
 			}
 			factory.randomArmor(z);
@@ -380,7 +384,7 @@ public class PlayScreen implements Screen {
 	
 	public void saveGame() {
 		SaveReadWriter saver = new SaveReadWriter(this.saveFileLoc);
-		saver.writeSave(world, player);
+		saver.writeSave(world, player, fov);
 	}
 }
 

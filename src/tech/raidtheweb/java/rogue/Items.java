@@ -1,16 +1,21 @@
 package tech.raidtheweb.java.rogue;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import asciiPanel.AsciiPanel;
 
-public class Items {
+public class Items implements Serializable {
 	
-	private static final Map<String, Item> items;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2698419064623553401L;
+	private final Map<String, Item> items;
 	
-	static {
-		items = new HashMap<>();
+	public Items() {
+		this.items = new HashMap<>();
 		
 		items.put("rock", new Item((char)174, AsciiPanel.yellow, "rock"));
 		
@@ -41,11 +46,11 @@ public class Items {
 		items.put("chainmail", chainmail);
 	}
 	
-	public static Item getItem(String name) {
+	public Item getItem(String name) {
 		return items.get(name);
 	}
 	
-	public static boolean exists(String name) {
+	public boolean exists(String name) {
 		return items.containsKey(name);
 	}
 

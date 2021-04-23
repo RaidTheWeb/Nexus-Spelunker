@@ -66,6 +66,12 @@ public class Creature implements Serializable {
 	public Item weapon() { return weapon; }
 
 	private Item armor;
+
+	private int homex;
+
+	private int homey;
+
+	private int homez;
 	public Item armor() { return armor; }
 
 	public void unequip(Item item){
@@ -109,6 +115,25 @@ public class Creature implements Serializable {
 		this.name = name;
 		this.inventory = new Inventory(20);
 		this.effects = new ArrayList<>();
+		this.homex = -1;
+		this.homey = -1;
+		this.homez = -1;
+	}
+	
+	public void goHome() {
+		if(homex == -1 && homey == -1 && homez == -1) {
+			this.notify("You do not have a home");
+		} else {
+			this.x = this.homex;
+			this.y = this.homey;
+			this.z = this.homez;
+		}
+	}
+	
+	public void setHome(int x, int y, int z) {
+		this.homex = x;
+		this.homey = y;
+		this.homez = z;
 	}
 	
 	public void moveBy(int mx, int my, int mz){

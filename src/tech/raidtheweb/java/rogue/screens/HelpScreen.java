@@ -20,6 +20,7 @@ public class HelpScreen implements Screen {
         terminal.write("[t] to throw", 2, y++);
         terminal.write("[f] to fire a ranged weapon", 2, y++);
         terminal.write("[b] to interact", 2, y++);
+        terminal.write("[F11] run DSLScript engine (program.dsl)", 2, y++);
         terminal.write("[ESC] to open menu", 2, y++);
     
         terminal.writeCenter("-- press any key to continue --", 22);

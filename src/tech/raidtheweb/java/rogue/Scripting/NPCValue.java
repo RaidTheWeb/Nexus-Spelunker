@@ -9,10 +9,12 @@ public class NPCValue implements Value {
 	private NPCOffer offer;
 	private String selling;
 	private String buying;
+	private Items Items;
 
 	public NPCValue(Value buying, Value selling) {
 		String buy = buying.asString();
 		String sell = selling.asString();
+		this.Items = new Items();
 		
 		if(Items.exists(buy) && Items.exists(sell)) {
 			this.selling = sell;

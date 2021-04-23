@@ -11,10 +11,12 @@ public class SaveGameObject implements Serializable {
 	
 	private Creature player;
 	private World world;
+	private FieldOfView fov;
 	
-	public SaveGameObject(Creature player, World world) {
+	public SaveGameObject(Creature player, World world, FieldOfView fov) {
 		this.player = player;
 		this.world = world;
+		this.fov = fov;
 	}
 	
 	public Creature getPlayer() {
@@ -23,5 +25,9 @@ public class SaveGameObject implements Serializable {
 	
 	public World getWorld() {
 		return world;
+	}
+	
+	public FieldOfView getFov() {
+		return fov;
 	}
 }
